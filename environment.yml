@@ -1,8 +1,10 @@
 name: eslp
 channels:
+  - bioconda
   - conda-forge
 dependencies:
   - biopython
+  - cd-hit
   - imbalanced-learn
   - ipykernel
   - ipywidgets
@@ -13,5 +15,3 @@ dependencies:
   - seaborn
   - shap
   - umap-learn
-
-prefix: "/Users/cytronicoder/miniforge3/envs/eslp"
