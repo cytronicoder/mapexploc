@@ -2,6 +2,9 @@
 
 This is a lightweight, interpretable machine-learning pipeline designed to predict protein subcellular localization from primary amino-acid sequences and reveal the key sequence motifs driving each classification. We combined classical feature engineering with a Random Forest classifier and Shapley Additive exPlanations (SHAP) to generate transparent, biologically meaningful insights.
 
+> [!NOTE]  
+> This project has won the [2025 YBS Student Challenge](https://www.iscb.org/ybs2025/programme-agenda/student-challenge) for its innovative approach to AI in bioinformatics.
+
 ## Features
 
 - Random Forest classifier trained on curated UniProtKB/Swiss-Prot sequences across 16 compartments
@@ -17,12 +20,14 @@ This is a lightweight, interpretable machine-learning pipeline designed to predi
    git clone https://github.com/cytronicoder/explainable-localization-predictor.git
    cd explainable-localization-predictor
    ```
+
 2. Create and activate a Conda environment (recommended):
 
    ```bash
    conda env create --file environment.yml
    conda activate eslp
    ```
+
 3. To update or add dependencies, modify `environment.yml` and run:
 
    ```bash
