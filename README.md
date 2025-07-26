@@ -3,7 +3,7 @@
 This is a lightweight, interpretable machine-learning pipeline designed to predict protein subcellular localization from primary amino-acid sequences and reveal the key sequence motifs driving each classification. We combined classical feature engineering with a Random Forest classifier and Shapley Additive exPlanations (SHAP) to generate transparent, biologically meaningful insights.
 
 > [!NOTE]  
-> This project has won the [2025 YBS Student Challenge](https://www.iscb.org/ybs2025/programme-agenda/student-challenge) for its innovative approach to AI in bioinformatics.
+> This project has won the [2025 ISCB YBS Student Challenge](https://www.iscb.org/ybs2025/programme-agenda/student-challenge) at the [2025 joint international conference on Intelligent Systems for Molecular Biology (ISMB) and the European Conference on Computational Biology (ECCB)](https://www.iscb.org/ismbeccb2025/home) for its innovative approach to AI in bioinformatics.
 
 ## Features
 
