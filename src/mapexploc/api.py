@@ -1,4 +1,5 @@
 """Small REST layer exposing prediction and explanation endpoints."""
+
 from __future__ import annotations
 
 from pathlib import Path

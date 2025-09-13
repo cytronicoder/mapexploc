@@ -1,4 +1,5 @@
 """Unified SHAP interface with fallbacks and reporting utilities."""
+
 from __future__ import annotations
 
 import json
@@ -47,7 +48,9 @@ class ShapExplainer:
         subset of the input batch is used.
     """
 
-    def __init__(self, model: BaseModelAdapter, background: Sequence[str] | None = None):
+    def __init__(
+        self, model: BaseModelAdapter, background: Sequence[str] | None = None
+    ):
         if shap is None:  # pragma: no cover - runtime guard
             raise RuntimeError("SHAP is not installed")
         self.model = model
@@ -87,4 +90,15 @@ class ShapExplainer:
         return {str(i): float(val) for i, val in enumerate(agg)}
 
 
-__all__ = ["ShapExplainer", "Explanation"]
+def explain(model, X: np.ndarray) -> np.ndarray:
+    """Return SHAP values for ``X`` using ``model`` if SHAP is available.
+
+    This is a simple compatibility function for the original explocal interface.
+    """
+    if shap is None:
+        raise RuntimeError("SHAP is not installed")
+    explainer = shap.TreeExplainer(model)
+    return explainer.shap_values(X)
+
+
+__all__ = ["ShapExplainer", "Explanation", "explain"]

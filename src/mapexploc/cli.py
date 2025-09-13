@@ -1,4 +1,5 @@
 """CLI for MAP-ExPLoc with prediction and explanation commands."""
+
 from __future__ import annotations
 
 import logging
@@ -9,10 +10,10 @@ import typer
 
 from .adapter import load_adapter
 from .explainers.shap import ShapExplainer
-from .features import build_feature_matrix  # type: ignore
-from .models.rf import train_random_forest, predict as rf_predict  # type: ignore
-from .config import load_config  # type: ignore
-from .data import load_example_dataset  # type: ignore
+from .features import build_feature_matrix
+from .models.rf import train_random_forest, predict as rf_predict
+from .config import load_config
+from .data import load_example_dataset
 from .report import ExplanationSet, GlobalReport, LocalReport
 
 logging.basicConfig(level=logging.INFO)

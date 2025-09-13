@@ -1,4 +1,5 @@
 """Sequence preprocessing and feature engineering."""
+
 from __future__ import annotations
 
 import logging
@@ -11,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 def amino_acid_composition(sequence: str) -> np.ndarray:
     """Compute normalized amino-acid composition."""
-    logger.debug("Computing amino-acid composition for sequence of length %s", len(sequence))
+    logger.debug(
+        "Computing amino-acid composition for sequence of length %s", len(sequence)
+    )
     amino_acids = "ACDEFGHIKLMNPQRSTVWY"
     counts = np.array([sequence.count(aa) for aa in amino_acids], dtype=float)
     return counts / counts.sum()
