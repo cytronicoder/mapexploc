@@ -1,4 +1,5 @@
 """Integration tests for the basic training pipeline."""
+
 from __future__ import annotations
 
 from pathlib import Path
