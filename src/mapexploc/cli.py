@@ -26,8 +26,8 @@ def train(config: Path = typer.Option(..., help="Path to YAML config")) -> None:
     """Train a RandomForest model from ``config`` and example data."""
     cfg = load_config(config)
     df = load_example_dataset(Path("examples/data/example_sequences.csv"))
-    X = build_feature_matrix(df["sequence"])
-    model = train_random_forest(X, df["label"].to_numpy(), cfg.model)
+    features = build_feature_matrix(df["sequence"])
+    model = train_random_forest(features, df["label"].to_numpy(), cfg.model)
     logger.info("Trained RandomForest on %s samples", len(df))
     Path("model.pkl").write_bytes(pickle.dumps(model))
 
@@ -37,8 +37,8 @@ def predict(sequence: str, model_path: Path = Path("model.pkl")) -> str:
     """Predict the subcellular localization for ``sequence``."""
     logger.info("Loading model from %s", model_path)
     model = pickle.loads(model_path.read_bytes())
-    X = build_feature_matrix([sequence])
-    pred = rf_predict(model, X)[0]
+    features = build_feature_matrix([sequence])
+    pred = rf_predict(model, features)[0]
     typer.echo(pred)
     return pred
 
@@ -48,9 +48,9 @@ def explain(sequence: str, model_path: Path = Path("model.pkl")) -> None:
     """Return SHAP explanation for ``sequence`` in JSON schema."""
     logger.info("Loading model from %s", model_path)
     model = load_adapter(pickle.loads(model_path.read_bytes()))
-    X = build_feature_matrix([sequence])
-    explainer = ShapExplainer(model, X)
-    exp = explainer.explain(X)
+    features = build_feature_matrix([sequence])
+    explainer = ShapExplainer(model, features)
+    exp = explainer.explain(features)
     shap_vals = exp.shap_values[0]
     interactions = exp.interaction_values[0]
     report = ExplanationSet(
@@ -67,6 +67,7 @@ def explain(sequence: str, model_path: Path = Path("model.pkl")) -> None:
 
 
 def main() -> None:  # pragma: no cover
+    """Entry point for the CLI application."""
     app()
 
 
