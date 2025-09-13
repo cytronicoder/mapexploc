@@ -63,7 +63,7 @@ def explain(sequence: str, model_path: Path = Path("model.pkl")) -> None:
         ],
         global_=GlobalReport(mean_abs_shap=explainer.global_summary(exp.shap_values)),
     )
-    typer.echo(report.json())
+    typer.echo(report.model_dump_json())
 
 
 def main() -> None:  # pragma: no cover
