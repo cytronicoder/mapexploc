@@ -15,18 +15,21 @@ logger = logging.getLogger(__name__)
 
 try:  # pragma: no cover - optional dependency
     import shap
-except Exception as exc:  # pragma: no cover
-    shap = None  # type: ignore
+except ImportError as exc:  # pragma: no cover
+    shap = None  # type: ignore  # pylint: disable=invalid-name
     logger.warning("SHAP is not installed: %s", exc)
 
 
 @dataclass
 class Explanation:
+    """SHAP explanation containing values, interactions, and expected value."""
+
     shap_values: np.ndarray
     interaction_values: np.ndarray
     expected_value: float
 
     def to_json(self) -> str:
+        """Convert explanation to JSON string."""
         return json.dumps(
             {
                 "shap_values": self.shap_values.tolist(),
@@ -57,25 +60,37 @@ class ShapExplainer:
         self.background = background
         self._explainer: Any | None = None
 
-    def _init_explainer(self, X: np.ndarray) -> None:
+    def _init_explainer(self, features: np.ndarray) -> None:
+        """Initialize the appropriate SHAP explainer based on model capabilities."""
         if self._explainer is not None:
             return
         if hasattr(self.model, "embed") and self.model.embed(["M"]) is not None:
             logger.info("Using DeepExplainer")
-            self._explainer = shap.DeepExplainer(self.model.predict_proba, X)
+            self._explainer = shap.DeepExplainer(self.model.predict_proba, features)
         else:
             logger.info("Using KernelExplainer")
-            background = X if self.background is None else self.background
+            background = features if self.background is None else self.background
             self._explainer = shap.KernelExplainer(self.model.predict_proba, background)
 
     def explain(self, batch: Sequence[str]) -> Explanation:
-        X = np.asarray(batch)
-        self._init_explainer(X)
-        shap_vals = self._explainer.shap_values(X)
+        """Generate SHAP explanations for a batch of sequences."""
+
+        features = np.asarray(batch)
+        self._init_explainer(features)
+        shap_vals = self._explainer.shap_values(features)
         shap_vals = np.asarray(shap_vals)
         try:  # interaction values are not supported by all explainers
-            interactions = np.asarray(self._explainer.shap_interaction_values(X))
-        except Exception:  # pragma: no cover - optional
+            if hasattr(self._explainer, "shap_interaction_values"):
+                interactions = np.asarray(
+                    self._explainer.shap_interaction_values(features)
+                )
+            else:
+                interactions = np.zeros(shap_vals.shape + (shap_vals.shape[-1],))
+        except (
+            AttributeError,
+            NotImplementedError,
+            ValueError,
+        ):  # pragma: no cover - optional
             interactions = np.zeros(shap_vals.shape + (shap_vals.shape[-1],))
         expected = (
             self._explainer.expected_value[0]
@@ -90,15 +105,27 @@ class ShapExplainer:
         return {str(i): float(val) for i, val in enumerate(agg)}
 
 
-def explain(model, X: np.ndarray) -> np.ndarray:
-    """Return SHAP values for ``X`` using ``model`` if SHAP is available.
+def explain(model, features: np.ndarray) -> np.ndarray:
+    """Return SHAP values for ``features`` using ``model`` if SHAP is available.
 
     This is a simple compatibility function for the original explocal interface.
+
+    Parameters
+    ----------
+    model : object
+        A trained tree-based model (e.g., RandomForestClassifier).
+    features : np.ndarray
+        Feature matrix to explain.
+
+    Returns
+    -------
+    np.ndarray
+        SHAP values for the input features.
     """
     if shap is None:
         raise RuntimeError("SHAP is not installed")
     explainer = shap.TreeExplainer(model)
-    return explainer.shap_values(X)
+    return explainer.shap_values(features)
 
 
 __all__ = ["ShapExplainer", "Explanation", "explain"]

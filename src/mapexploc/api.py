@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pickle
 from pathlib import Path
 from typing import List
 
@@ -13,15 +14,31 @@ from .explainers.shap import ShapExplainer
 
 
 class PredictRequest(BaseModel):
+    """Request model for prediction endpoint."""
+
     sequences: List[str]
     model_path: Path | None = None
 
 
 class ExplainRequest(PredictRequest):
+    """Request model for explanation endpoint, extends PredictRequest."""
+
     background: List[str] | None = None
 
 
 def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
+    """Create and configure a FastAPI application with prediction and explanation endpoints.
+
+    Parameters
+    ----------
+    model : BaseModelAdapter | None, optional
+        Pre-loaded model adapter. If None, models will be loaded from request paths.
+
+    Returns
+    -------
+    FastAPI
+        Configured FastAPI application with /predict and /explain endpoints.
+    """
     app = FastAPI(title="MAP-ExPLoc")
     adapter = model
     explainer: ShapExplainer | None = None
@@ -49,10 +66,9 @@ def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
 
 
 def _load_model(path: Path | None) -> BaseModelAdapter:
+    """Load a pickled model from the given path."""
     if path is None:
         raise ValueError("model_path must be provided")
-    import pickle
-
     return pickle.loads(Path(path).read_bytes())
 
 

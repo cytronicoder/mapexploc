@@ -7,18 +7,12 @@ predictions with SHAP.
 
 from importlib.metadata import version, PackageNotFoundError
 
-try:
-    __version__ = version("mapexploc")
-except PackageNotFoundError:  # pragma: no cover
-    __version__ = "0.0.0"
-
 from .adapter import BaseModelAdapter, load_adapter
 from .api import create_app
-from .explainers.shap import ShapExplainer
 from .config import Settings, ModelConfig, load_config
 from .data import load_example_dataset, iter_sequences
+from .explainers.shap import ShapExplainer
 from .features import build_feature_matrix
-from .preprocessing import amino_acid_composition, featurize
 from .models import (
     train_knn,
     knn_predict,
@@ -27,6 +21,12 @@ from .models import (
     rf_predict,
     RandomForestClassifier,
 )
+from .preprocessing import amino_acid_composition, featurize
+
+try:
+    __version__ = version("mapexploc")
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "0.0.0"
 
 __all__ = [
     "__version__",

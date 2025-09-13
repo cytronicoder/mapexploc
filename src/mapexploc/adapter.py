@@ -33,15 +33,19 @@ class _SimpleAdapter:
     """Wrap objects implementing the required methods into ``BaseModelAdapter``."""
 
     def __init__(self, model: Any):
+        """Initialize the adapter with the given model."""
         self.model = model
 
     def predict(self, batch: Sequence[str]) -> np.ndarray:  # type: ignore[override]
+        """Return predicted class labels for batch by delegating to wrapped model."""
         return np.asarray(self.model.predict(batch))
 
     def predict_proba(self, batch: Sequence[str]) -> np.ndarray:  # type: ignore[override]
+        """Return class probabilities for batch by delegating to wrapped model."""
         return np.asarray(self.model.predict_proba(batch))
 
     def embed(self, batch: Sequence[str]) -> Optional[np.ndarray]:  # type: ignore[override]
+        """Return embeddings for batch if the wrapped model supports it."""
         if hasattr(self.model, "embed"):
             return np.asarray(self.model.embed(batch))
         return None
