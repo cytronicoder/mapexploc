@@ -27,7 +27,7 @@ class ExplainRequest(PredictRequest):
 
 
 def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
-    """Create and configure a FastAPI application with prediction and explanation endpoints.
+    """Create and configure a FastAPI application with prediction and explanation.
 
     Parameters
     ----------

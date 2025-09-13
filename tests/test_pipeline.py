@@ -6,7 +6,7 @@ from pathlib import Path
 from mapexploc.config import load_config
 from mapexploc.data import load_example_dataset
 from mapexploc.features import build_feature_matrix
-from mapexploc.models.rf import train_random_forest, predict
+from mapexploc.models.rf import predict, train_random_forest
 
 
 def test_training_pipeline(tmp_path: Path) -> None:
