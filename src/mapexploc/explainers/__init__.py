@@ -1,4 +1,5 @@
 """Explainability utilities for MAP-ExPLoc."""
-from .shap import ShapExplainer, Explanation
 
-__all__ = ["ShapExplainer", "Explanation"]
+from .shap import ShapExplainer, Explanation, explain
+
+__all__ = ["ShapExplainer", "Explanation", "explain"]

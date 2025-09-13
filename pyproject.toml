@@ -40,7 +40,7 @@ line-length = 88
 [tool.mypy]
 strict = true
 pretty = true
-packages = ["mapexploc", "explocal"]
+packages = ["mapexploc"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

@@ -1,4 +1,5 @@
 """Evaluation utilities for predictions and explanations."""
+
 from __future__ import annotations
 
 from typing import Sequence
@@ -7,7 +8,9 @@ import numpy as np
 from sklearn.calibration import calibration_curve
 
 
-def expected_calibration_error(y_true: Sequence[int], y_prob: Sequence[float], n_bins: int = 10) -> float:
+def expected_calibration_error(
+    y_true: Sequence[int], y_prob: Sequence[float], n_bins: int = 10
+) -> float:
     """Compute the Expected Calibration Error (ECE)."""
     prob_true, prob_pred = calibration_curve(y_true, y_prob, n_bins=n_bins)
     return float(np.abs(prob_true - prob_pred).mean())

@@ -1,4 +1,5 @@
 """Random Forest model utilities."""
+
 from __future__ import annotations
 
 import logging
@@ -11,7 +12,9 @@ from ..config import ModelConfig
 logger = logging.getLogger(__name__)
 
 
-def train_random_forest(X: np.ndarray, y: np.ndarray, cfg: ModelConfig | None = None) -> RandomForestClassifier:
+def train_random_forest(
+    X: np.ndarray, y: np.ndarray, cfg: ModelConfig | None = None
+) -> RandomForestClassifier:
     """Train a RandomForest classifier using ``cfg`` hyperparameters."""
     cfg = cfg or ModelConfig()
     logger.info("Training RandomForest with %s trees", cfg.n_estimators)

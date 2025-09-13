@@ -1,14 +1,51 @@
-from __future__ import annotations
-import importlib, sys
+"""MAP-ExPLoc: Explainable Subcellular Localization Predictor.
 
-for _name in ["config", "data", "features", "models", "preprocessing"]:
-    try:
-        sys.modules[f"mapexploc.{_name}"] = importlib.import_module(f"explocal.{_name}")
-    except Exception:
-        pass
+This package provides utilities for preprocessing protein sequences,
+training classical machine-learning models, and interpreting
+predictions with SHAP.
+"""
+
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("mapexploc")
+except PackageNotFoundError:  # pragma: no cover
+    __version__ = "0.0.0"
 
 from .adapter import BaseModelAdapter, load_adapter
 from .api import create_app
 from .explainers.shap import ShapExplainer
+from .config import Settings, ModelConfig, load_config
+from .data import load_example_dataset, iter_sequences
+from .features import build_feature_matrix
+from .preprocessing import amino_acid_composition, featurize
+from .models import (
+    train_knn,
+    knn_predict,
+    KNeighborsClassifier,
+    train_random_forest,
+    rf_predict,
+    RandomForestClassifier,
+)
 
-__all__ = ["BaseModelAdapter", "load_adapter", "ShapExplainer", "create_app"]
+__all__ = [
+    "__version__",
+    "BaseModelAdapter",
+    "load_adapter",
+    "ShapExplainer",
+    "create_app",
+    "Settings",
+    "ModelConfig",
+    "load_config",
+    "load_example_dataset",
+    "iter_sequences",
+    "build_feature_matrix",
+    "amino_acid_composition",
+    "featurize",
+    "train_knn",
+    "knn_predict",
+    "KNeighborsClassifier",
+    "train_random_forest",
+    "rf_predict",
+    "RandomForestClassifier",
+]

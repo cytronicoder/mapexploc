@@ -1,4 +1,5 @@
 """Model adapter interface for MAP-ExPLoc."""
+
 from __future__ import annotations
 
 from typing import Any, Protocol, Sequence, runtime_checkable, Optional
@@ -21,7 +22,9 @@ class BaseModelAdapter(Protocol):
     def predict_proba(self, batch: Sequence[str]) -> np.ndarray:
         """Return class probabilities for ``batch``."""
 
-    def embed(self, batch: Sequence[str]) -> Optional[np.ndarray]:  # pragma: no cover - optional
+    def embed(
+        self, batch: Sequence[str]
+    ) -> Optional[np.ndarray]:  # pragma: no cover - optional
         """Return embeddings for ``batch`` if available."""
         raise NotImplementedError
 

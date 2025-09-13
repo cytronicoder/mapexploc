@@ -1,4 +1,5 @@
 """Configuration utilities using pydantic and YAML."""
+
 from __future__ import annotations
 
 from pathlib import Path
