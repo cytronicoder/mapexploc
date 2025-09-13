@@ -1,9 +1,9 @@
-# Explocal
+# MAP-ExPLoc
 
-Explainable Subcellular Localization Predictor.
+Model-Agnostic Pipeline for Explainable Localization.
 
 ## Overview
 
-`explocal` provides a lightweight, interpretable pipeline for
+`mapexploc` provides a lightweight, interpretable pipeline for
 predicting protein subcellular localization from primary amino-acid
 sequence.

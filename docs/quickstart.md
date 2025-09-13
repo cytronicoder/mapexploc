@@ -1,7 +1,8 @@
 # Quickstart
 
 ```bash
-pip install explocal
-explocal train --config config/default.yml
-explocal predict MKTIIALSYIFCLVFADYKDDDDK
+pip install map-exploc
+mapexploc train --config config/default.yml
+mapexploc predict MKTIIALSYIFCLVFADYKDDDDK
+mapexploc explain MKTIIALSYIFCLVFADYKDDDDK
 ```

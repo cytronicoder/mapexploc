@@ -6,7 +6,7 @@ from shutil import copyfile
 
 from typer.testing import CliRunner
 
-from explocal.cli import app
+from mapexploc.cli import app
 
 
 def test_cli_train_predict(tmp_path: Path, monkeypatch) -> None:
@@ -23,5 +23,9 @@ def test_cli_train_predict(tmp_path: Path, monkeypatch) -> None:
         assert result.exit_code == 0
         result = runner.invoke(
             app, ["predict", "MKTIIALSYIFCLVFADYKDDDDK", "--model-path", "model.pkl"]
+        )
+        assert result.exit_code == 0
+        result = runner.invoke(
+            app, ["explain", "MKTIIALSYIFCLVFADYKDDDDK", "--model-path", "model.pkl"]
         )
         assert result.exit_code == 0

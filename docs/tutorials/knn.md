@@ -1,5 +1,5 @@
 # k-NN Tutorial
 
 ```python
-from explocal.models.knn import train_knn
+from mapexploc.models.knn import train_knn
 ```

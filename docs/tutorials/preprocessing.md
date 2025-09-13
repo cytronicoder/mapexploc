@@ -1,5 +1,5 @@
 # Preprocessing Tutorial
 
 ```python
-from explocal.preprocessing import featurize
+from mapexploc.preprocessing import featurize
 ```
