@@ -26,6 +26,27 @@ dependencies = [
 torch = ["torch"]
 esm = ["esm"]
 docs = ["mkdocs", "mkdocstrings[python]", "mkdocs-material"]
+dev = [
+  "pytest>=6.0",
+  "black>=22.0",
+  "ruff>=0.1.0",
+  "mypy>=1.0",
+  "pre-commit>=2.20",
+  "types-pyyaml",
+]
+notebooks = [
+  "jupyter",
+  "ipykernel",
+  "ipywidgets",
+  "matplotlib>=3.5",
+  "seaborn>=0.11",
+  "imbalanced-learn>=0.9",
+  "umap-learn>=0.5",
+  "joblib>=1.0",
+]
+bio = [
+  "biopython>=1.79",
+]
 
 [project.scripts]
 mapexploc = "mapexploc.cli:main"

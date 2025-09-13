@@ -4,17 +4,44 @@ Model-Agnostic Pipeline for Explainable Localization.
 
 ## Installation
 
+### Basic Installation
+
 ```bash
 pip install map-exploc
 ```
 
-From source:
+### From Source
 
 ```bash
 git clone https://github.com/cytronicoder/explainable-localization-predictor.git
 cd explainable-localization-predictor
 pip install -e .
 ```
+
+### Development Environment
+
+For development with all dependencies:
+
+```bash
+pip install -e .[dev,notebooks,docs]
+```
+
+Or using conda/mamba:
+
+```bash
+conda env create -f environment.yml
+conda activate eslp
+pip install -e .
+```
+
+#### Optional Dependencies
+
+- **`dev`**: Testing, linting, and code quality tools
+- **`notebooks`**: Jupyter, plotting, and analysis tools
+- **`docs`**: Documentation generation tools
+- **`torch`**: PyTorch for deep learning models
+- **`esm`**: ESM protein language models
+- **`bio`**: Bioinformatics tools (BioPython)
 
 ## Usage
 
