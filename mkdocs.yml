@@ -1,9 +1,14 @@
-site_name: Explocal
+site_name: MAP-ExPLoc
 repo_url: https://github.com/cytronicoder/explainable-localization-predictor
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
   - API Reference: api.md
+  - Adapter Guide: adapter-guide.md
+  - Explainer Guide: explainer-guide.md
+  - Reporting Schema: reporting-schema.md
+  - UI Usage: ui.md
+  - Migration: migration.md
   - Tutorials:
       - Preprocessing: tutorials/preprocessing.md
       - k-NN: tutorials/knn.md

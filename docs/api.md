@@ -1,4 +1,4 @@
 # API Reference
 
-::: explocal
+::: mapexploc
     handler: python

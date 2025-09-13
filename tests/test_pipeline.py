@@ -3,10 +3,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from explocal.config import load_config
-from explocal.data import load_example_dataset
-from explocal.features import build_feature_matrix
-from explocal.models.rf import train_random_forest, predict
+from mapexploc.config import load_config
+from mapexploc.data import load_example_dataset
+from mapexploc.features import build_feature_matrix
+from mapexploc.models.rf import train_random_forest, predict
 
 
 def test_training_pipeline(tmp_path: Path) -> None:

@@ -1,11 +1,11 @@
-# Explocal
+# MAP-ExPLoc
 
-Explainable Subcellular Localization Predictor.
+Model-Agnostic Pipeline for Explainable Localization.
 
 ## Installation
 
 ```bash
-pip install explocal
+pip install map-exploc
 ```
 
 From source:
@@ -21,18 +21,19 @@ pip install -e .
 ### CLI
 
 ```bash
-explocal train --config config/default.yml
-explocal predict MKTIIALSYIFCLVFADYKDDDDK
+mapexploc train --config config/default.yml
+mapexploc predict MKTIIALSYIFCLVFADYKDDDDK
+mapexploc explain MKTIIALSYIFCLVFADYKDDDDK
 ```
 
 ### Python
 
 ```python
 from pathlib import Path
-from explocal.config import load_config
-from explocal.data import load_example_dataset
-from explocal.features import build_feature_matrix
-from explocal.models.rf import train_random_forest, predict
+from mapexploc.config import load_config
+from mapexploc.data import load_example_dataset
+from mapexploc.features import build_feature_matrix
+from mapexploc.models.rf import train_random_forest, predict
 
 cfg = load_config(Path("config/default.yml"))
 df = load_example_dataset(Path("examples/data/example_sequences.csv"))

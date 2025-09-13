@@ -1,5 +1,5 @@
 # SHAP Tutorial
 
 ```python
-from explocal.explainability.shap import explain
+from mapexploc.explainers import ShapExplainer
 ```
