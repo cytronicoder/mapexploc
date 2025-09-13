@@ -7,7 +7,7 @@ import random
 from pathlib import Path
 
 import numpy as np
-import yaml
+import yaml  # type: ignore[import-untyped]
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)

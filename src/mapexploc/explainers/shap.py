@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 try:  # pragma: no cover - optional dependency
     import shap
 except ImportError as exc:  # pragma: no cover
-    shap = None  # type: ignore  # pylint: disable=invalid-name
+    shap = None
     logger.warning("SHAP is not installed: %s", exc)
 
 
@@ -77,6 +77,7 @@ class ShapExplainer:
 
         features = np.asarray(batch)
         self._init_explainer(features)
+        assert self._explainer is not None  # Initialized by _init_explainer
         shap_vals = self._explainer.shap_values(features)
         shap_vals = np.asarray(shap_vals)
         try:  # interaction values are not supported by all explainers
@@ -105,7 +106,7 @@ class ShapExplainer:
         return {str(i): float(val) for i, val in enumerate(agg)}
 
 
-def explain(model, features: np.ndarray) -> np.ndarray:
+def explain(model: Any, features: np.ndarray) -> np.ndarray:
     """Return SHAP values for ``features`` using ``model`` if SHAP is available.
 
     This is a simple compatibility function for the original explocal interface.
