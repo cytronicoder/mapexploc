@@ -5,21 +5,21 @@ training classical machine-learning models, and interpreting
 predictions with SHAP.
 """
 
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
 from .adapter import BaseModelAdapter, load_adapter
 from .api import create_app
-from .config import Settings, ModelConfig, load_config
-from .data import load_example_dataset, iter_sequences
+from .config import ModelConfig, Settings, load_config
+from .data import iter_sequences, load_example_dataset
 from .explainers.shap import ShapExplainer
 from .features import build_feature_matrix
 from .models import (
-    train_knn,
-    knn_predict,
     KNeighborsClassifier,
-    train_random_forest,
-    rf_predict,
     RandomForestClassifier,
+    knn_predict,
+    rf_predict,
+    train_knn,
+    train_random_forest,
 )
 from .preprocessing import amino_acid_composition, featurize
 

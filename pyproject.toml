@@ -34,8 +34,10 @@ mapexploc = "mapexploc.cli:main"
 line-length = 88
 
 [tool.ruff]
-select = ["E", "F", "I"]
 line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
 
 [tool.mypy]
 strict = true

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Protocol, Sequence, runtime_checkable, Optional
+from typing import Any, Optional, Protocol, Sequence, runtime_checkable
 
 import numpy as np
 

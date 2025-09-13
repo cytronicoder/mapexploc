@@ -9,11 +9,12 @@ from pathlib import Path
 import typer
 
 from .adapter import load_adapter
-from .explainers.shap import ShapExplainer
-from .features import build_feature_matrix
-from .models.rf import train_random_forest, predict as rf_predict
 from .config import load_config
 from .data import load_example_dataset
+from .explainers.shap import ShapExplainer
+from .features import build_feature_matrix
+from .models.rf import predict as rf_predict
+from .models.rf import train_random_forest
 from .report import ExplanationSet, GlobalReport, LocalReport
 
 logging.basicConfig(level=logging.INFO)

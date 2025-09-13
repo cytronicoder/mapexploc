@@ -1,7 +1,9 @@
 """Model subpackage."""
 
-from .knn import train_knn, predict as knn_predict, KNeighborsClassifier
-from .rf import train_random_forest, predict as rf_predict, RandomForestClassifier
+from .knn import KNeighborsClassifier, train_knn
+from .knn import predict as knn_predict
+from .rf import RandomForestClassifier, train_random_forest
+from .rf import predict as rf_predict
 
 __all__ = [
     "train_knn",
