@@ -22,7 +22,7 @@ app = typer.Typer()
 logger = logging.getLogger(__name__)
 
 
-@app.command()
+@app.command()  # type: ignore[misc]
 def train(config: Path = typer.Option(..., help="Path to YAML config")) -> None:
     """Train a RandomForest model from ``config`` and example data."""
     cfg = load_config(config)
@@ -33,18 +33,17 @@ def train(config: Path = typer.Option(..., help="Path to YAML config")) -> None:
     Path("model.pkl").write_bytes(pickle.dumps(model))
 
 
-@app.command()
-def predict(sequence: str, model_path: Path = Path("model.pkl")) -> str:
+@app.command()  # type: ignore[misc]
+def predict(sequence: str, model_path: Path = Path("model.pkl")) -> None:
     """Predict the subcellular localization for ``sequence``."""
     logger.info("Loading model from %s", model_path)
     model = pickle.loads(model_path.read_bytes())
     features = build_feature_matrix([sequence])
     pred = rf_predict(model, features)[0]
     typer.echo(pred)
-    return pred
 
 
-@app.command()
+@app.command()  # type: ignore[misc]
 def explain(sequence: str, model_path: Path = Path("model.pkl")) -> None:
     """Return SHAP explanation for ``sequence`` in JSON schema."""
     logger.info("Loading model from %s", model_path)

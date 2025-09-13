@@ -1,15 +1,15 @@
 """Tests for the command line interface."""
-from __future__ import annotations
 
 from pathlib import Path
 from shutil import copyfile
+from typing import Any
 
 from typer.testing import CliRunner
 
 from mapexploc.cli import app
 
 
-def test_cli_train_predict(tmp_path: Path, monkeypatch) -> None:
+def test_cli_train_predict(tmp_path: Path, monkeypatch: Any) -> None:
     runner = CliRunner()
     root = Path(__file__).resolve().parents[1]
     cfg_path = root / "config" / "default.yml"

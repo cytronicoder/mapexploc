@@ -18,15 +18,15 @@ def expected_calibration_error(
 
 def aopc(scores: Sequence[float]) -> float:
     """Area over the Perturbation Curve (AOPC)."""
-    scores = np.asarray(scores)
-    return float(scores.mean())
+    scores_array = np.asarray(scores)
+    return float(scores_array.mean())
 
 
 def insertion_deletion(reference: Sequence[float], perturbed: Sequence[float]) -> float:
     """Faithfulness metric comparing reference and perturbed outputs."""
-    reference = np.asarray(reference)
-    perturbed = np.asarray(perturbed)
-    return float(np.abs(reference - perturbed).mean())
+    reference_array = np.asarray(reference)
+    perturbed_array = np.asarray(perturbed)
+    return float(np.abs(reference_array - perturbed_array).mean())
 
 
 __all__ = ["expected_calibration_error", "aopc", "insertion_deletion"]

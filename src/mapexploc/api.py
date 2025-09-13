@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pickle
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -43,16 +43,16 @@ def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
     adapter = model
     explainer: ShapExplainer | None = None
 
-    @app.post("/predict")
-    def predict(req: PredictRequest):
+    @app.post("/predict")  # type: ignore[misc]
+    def predict(req: PredictRequest) -> Dict[str, List[int]]:
         nonlocal adapter
         if adapter is None:
             adapter = load_adapter(_load_model(req.model_path))
         preds = adapter.predict(req.sequences)
         return {"predictions": preds.tolist()}
 
-    @app.post("/explain")
-    def explain(req: ExplainRequest):
+    @app.post("/explain")  # type: ignore[misc]
+    def explain(req: ExplainRequest) -> str:
         nonlocal adapter, explainer
         if adapter is None:
             adapter = load_adapter(_load_model(req.model_path))
@@ -66,10 +66,10 @@ def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
 
 
 def _load_model(path: Path | None) -> BaseModelAdapter:
-    """Load a pickled model from the given path."""
+    """Load model from pickle file."""
     if path is None:
-        raise ValueError("model_path must be provided")
-    return pickle.loads(Path(path).read_bytes())
+        path = Path("model.pkl")
+    return pickle.loads(Path(path).read_bytes())  # type: ignore[no-any-return]
 
 
 __all__ = ["create_app"]
