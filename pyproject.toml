@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=67", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "explocal"
+version = "0.1.0"
+description = "Explainable Subcellular Localization Predictor"
+readme = "README.md"
+authors = [{name = "Explocal Developers", email = "dev@example.com"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+  "numpy",
+  "pandas",
+  "scikit-learn",
+  "pydantic>=1.10",
+  "pyyaml",
+  "typer>=0.9",
+]
+
+[project.optional-dependencies]
+torch = ["torch"]
+esm = ["esm"]
+docs = ["mkdocs", "mkdocstrings[python]", "mkdocs-material"]
+
+[project.scripts]
+explocal = "explocal.cli:main"
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 88
+
+[tool.mypy]
+strict = true
+pretty = true
+packages = ["explocal"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

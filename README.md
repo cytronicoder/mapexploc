@@ -1,70 +1,79 @@
-# Explainable Subcellular Localization Predictor
+# Explocal
 
-This is a lightweight, interpretable machine-learning pipeline designed to predict protein subcellular localization from primary amino-acid sequences and reveal the key sequence motifs driving each classification. We combined classical feature engineering with a Random Forest classifier and Shapley Additive exPlanations (SHAP) to generate transparent, biologically meaningful insights.
-
-> [!NOTE]  
-> This project has won the [2025 ISCB YBS Student Challenge](https://www.iscb.org/ybs2025/programme-agenda/student-challenge) at the [2025 joint international conference on Intelligent Systems for Molecular Biology (ISMB) and the European Conference on Computational Biology (ECCB)](https://www.iscb.org/ismbeccb2025/home) for its innovative approach to AI in bioinformatics.
-
-## Features
-
-- Random Forest classifier trained on curated UniProtKB/Swiss-Prot sequences across 16 compartments
-- SHAP values assign per-feature contributions for each protein prediction
-- Minimal dependencies and fast inference on standard workstations
-- Easily swap in new classifiers or add custom features
+Explainable Subcellular Localization Predictor.
 
 ## Installation
 
-1. Clone the repository:
+```bash
+pip install explocal
+```
 
-   ```bash
-   git clone https://github.com/cytronicoder/explainable-localization-predictor.git
-   cd explainable-localization-predictor
-   ```
+From source:
 
-2. Create and activate a Conda environment (recommended):
+```bash
+git clone https://github.com/cytronicoder/explainable-localization-predictor.git
+cd explainable-localization-predictor
+pip install -e .
+```
 
-   ```bash
-   conda env create --file environment.yml
-   conda activate eslp
-   ```
+## Usage
 
-3. To update or add dependencies, modify `environment.yml` and run:
+### CLI
 
-   ```bash
-   conda env update --file environment.yml --prune
-   ```
+```bash
+explocal train --config config/default.yml
+explocal predict MKTIIALSYIFCLVFADYKDDDDK
+```
 
-## Requirements
+### Python
 
-- Python 3.8 or higher
-- scikit-learn
-- SHAP
-- pandas
-- numpy
-- matplotlib (for optional plotting)
+```python
+from pathlib import Path
+from explocal.config import load_config
+from explocal.data import load_example_dataset
+from explocal.features import build_feature_matrix
+from explocal.models.rf import train_random_forest, predict
 
-## Feature Engineering
+cfg = load_config(Path("config/default.yml"))
+df = load_example_dataset(Path("examples/data/example_sequences.csv"))
+X = build_feature_matrix(df["sequence"])
+model = train_random_forest(X, df["label"].to_numpy(), cfg.model)
+print(predict(model, X))
+```
 
-- Amino-acid composition (20 dimensions)
-- Dipeptide frequencies (400 dimensions)
-- Physicochemical properties (molecular weight, isoelectric point)
-- Entropy measures for disorder prediction
+## Development
 
-## Results
+Install additional dependencies and pre-commit hooks:
 
-Sample performance on the held-out test set:
+```bash
+pip install -e .[torch,esm]
+pre-commit install
+```
 
-- Overall weighted F1: 0.88
-- Compartment AUCs: 0.93–0.97
-- Key biological insights:
-  - Hydrophobicity (GRAVY) drives membrane vs. soluble distinction
-  - Isoelectric point correlates with cytosolic adaptation
-  - Sequence length penalties reveal targeting constraints
+Run tests and type checking:
+
+```bash
+pre-commit run --files $(git ls-files '*.py')
+pytest
+```
+
+## Documentation
+
+Build the documentation locally:
+
+```bash
+mkdocs serve
+```
+
+## Publishing
+
+To build and upload a release to PyPI:
+
+```bash
+python -m build
+python -m twine upload dist/*
+```
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Contributing
-
-Contributions are welcome! Please open issues for bug reports or feature requests, and submit pull requests against the `main` branch.
