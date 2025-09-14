@@ -14,14 +14,16 @@ from .data import iter_sequences, load_example_dataset
 from .explainers.shap import ShapExplainer
 from .features import build_feature_matrix
 from .models import (
-    KNeighborsClassifier,
-    RandomForestClassifier,
-    knn_predict,
-    rf_predict,
     train_knn,
+    knn_predict,
+    knn_predict_proba,
+    evaluate_knn,
     train_random_forest,
+    rf_predict,
+    rf_predict_proba,
+    evaluate_rf,
 )
-from .preprocessing import amino_acid_composition, featurize
+from .preprocessing import extract_protein_data, _clean_and_primary, ALLOWED_LOCS
 
 try:
     __version__ = version("mapexploc")
@@ -40,12 +42,15 @@ __all__ = [
     "load_example_dataset",
     "iter_sequences",
     "build_feature_matrix",
-    "amino_acid_composition",
-    "featurize",
+    "extract_protein_data",
+    "_clean_and_primary",
+    "ALLOWED_LOCS",
     "train_knn",
     "knn_predict",
-    "KNeighborsClassifier",
+    "knn_predict_proba",
+    "evaluate_knn",
     "train_random_forest",
     "rf_predict",
-    "RandomForestClassifier",
+    "rf_predict_proba",
+    "evaluate_rf",
 ]
