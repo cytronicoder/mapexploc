@@ -3,20 +3,21 @@
 from __future__ import annotations
 
 import logging
-from typing import Union
+from typing import Any
 
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
-def build_feature_matrix(fasta_file: str, annotations_file: str) -> pd.DataFrame:
+def build_feature_matrix(
+    fasta_file: str, annotations_file: str | None = None
+) -> pd.DataFrame:
     """Build feature matrix from FASTA sequences and annotations.
 
     Args:
         fasta_file: Path to FASTA file containing sequences
-        annotations_file: Path to CSV file containing annotations
+        annotations_file: Path to CSV file containing annotations (optional)
 
     Returns:
         DataFrame with features and metadata columns
@@ -26,7 +27,8 @@ def build_feature_matrix(fasta_file: str, annotations_file: str) -> pd.DataFrame
         from Bio.SeqUtils.ProtParam import ProteinAnalysis
     except ImportError:
         logger.error(
-            "BioPython is required but not installed. Install with: pip install biopython"
+            "BioPython is required but not installed. Install with: "
+            "pip install biopython"
         )
         raise ImportError("BioPython is required for feature extraction")
 
@@ -38,8 +40,7 @@ def build_feature_matrix(fasta_file: str, annotations_file: str) -> pd.DataFrame
         ann_map = dict(zip(annotations["entry_name"], annotations["localization"]))
 
     # Process FASTA sequences
-    sequences_data = []
-    feature_data = []
+    feature_data: list[dict[str, Any]] = []
 
     logger.info("Processing FASTA sequences from %s", fasta_file)
 

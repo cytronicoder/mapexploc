@@ -1,19 +1,18 @@
-"""k-Nearest Neighbors (k-NN) classification model for protein subcellular localization."""
+"""k-NN classification model for protein subcellular localization."""
 
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 try:
+    from sklearn.model_selection import GridSearchCV, KFold
+    from sklearn.neighbors import KNeighborsClassifier
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import StandardScaler
-    from sklearn.neighbors import KNeighborsClassifier
-    from sklearn.model_selection import GridSearchCV, KFold
-    from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 except ImportError:
     raise ImportError("scikit-learn is required for k-NN modeling")
 
@@ -89,7 +88,8 @@ def train_knn(
     # Default parameter grid to match notebook behavior
     if param_grid is None:
         # For cross-validation, we need k <= smallest_training_set_size
-        # With cv folds, the training size per fold is approximately: n_samples * (cv-1)/cv
+        # With cv folds, the training size per fold is approximately:
+        # n_samples * (cv-1)/cv
         min_train_size_per_fold = int(n_samples * (cv - 1) / cv)
 
         # For very small datasets, be even more conservative
@@ -210,11 +210,11 @@ def evaluate_knn(
     try:
         from sklearn.metrics import (
             accuracy_score,
-            f1_score,
+            auc,
             classification_report,
             confusion_matrix,
+            f1_score,
             roc_curve,
-            auc,
         )
         from sklearn.preprocessing import label_binarize
     except ImportError:

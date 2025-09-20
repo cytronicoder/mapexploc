@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Tuple, Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -37,14 +37,15 @@ def train_random_forest(
         Dictionary containing trained model, best parameters, and evaluation results
     """
     try:
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.preprocessing import StandardScaler
-        from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
-        from imblearn.pipeline import Pipeline as ImbPipeline
         from imblearn.over_sampling import SMOTE
+        from imblearn.pipeline import Pipeline as ImbPipeline
+        from sklearn.ensemble import RandomForestClassifier
+        from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
+        from sklearn.preprocessing import StandardScaler
     except ImportError:
         logger.error(
-            "Required packages not installed. Install with: pip install scikit-learn imbalanced-learn"
+            "Required packages not installed. Install with: "
+            "pip install scikit-learn imbalanced-learn"
         )
         raise ImportError("scikit-learn and imbalanced-learn are required")
 
@@ -59,9 +60,11 @@ def train_random_forest(
     # Check if dataset is too small for SMOTE
     min_class_size = y_train.value_counts().min()
     if use_smote and min_class_size < 6:  # SMOTE needs k=5 neighbors by default
-        logger.warning(f"Disabling SMOTE due to small class size ({min_class_size} samples)")
+        logger.warning(
+            f"Disabling SMOTE due to small class size ({min_class_size} samples)"
+        )
         use_smote = False
-    
+
     # Create pipeline with optional SMOTE and scaling
     steps = []
     if use_smote:
@@ -114,11 +117,11 @@ def train_random_forest(
 
     # Return dictionary with all results
     return {
-        'model': search.best_estimator_,
-        'best_params': search.best_params_,
-        'best_cv_score': search.best_score_,
-        'cv_results': cv_results,
-        'search': search
+        "model": search.best_estimator_,
+        "best_params": search.best_params_,
+        "best_cv_score": search.best_score_,
+        "cv_results": cv_results,
+        "search": search,
     }
 
 
@@ -167,19 +170,16 @@ def evaluate_rf(
     try:
         from sklearn.metrics import (
             accuracy_score,
-            f1_score,
-            classification_report,
-            confusion_matrix,
-            roc_curve,
             auc,
-            precision_recall_curve,
             average_precision_score,
             brier_score_loss,
-            calibration_curve,
+            classification_report,
+            confusion_matrix,
+            f1_score,
+            precision_recall_curve,
+            roc_curve,
         )
         from sklearn.preprocessing import label_binarize
-        import matplotlib.pyplot as plt
-        import seaborn as sns
     except ImportError:
         logger.error("Required packages not installed")
         raise ImportError(

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +125,8 @@ def extract_protein_data(dat_file_path: str) -> List[Dict[str, Any]]:
         from Bio import SwissProt
     except ImportError:
         logger.error(
-            "BioPython is required but not installed. Install with: pip install biopython"
+            "BioPython is required but not installed. Install with: "
+            "pip install biopython"
         )
         raise ImportError("BioPython is required for Swiss-Prot parsing")
 

@@ -9,7 +9,7 @@ This directory contains several requirements files optimized for different use c
 This file includes all dependencies needed to run mapexploc with complete functionality, including:
 
 - Core machine learning libraries (scikit-learn, numpy, pandas)
-- Bioinformatics tools (BioPython) 
+- Bioinformatics tools (BioPython)
 - Visualization libraries (matplotlib, seaborn, umap-learn)
 - Model explainability tools (SHAP)
 - API and CLI frameworks (FastAPI, Typer)

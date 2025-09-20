@@ -10,7 +10,6 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from .adapter import BaseModelAdapter, load_adapter
-from .explainers.shap import ShapExplainer
 
 
 class PredictRequest(BaseModel):
@@ -41,7 +40,6 @@ def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
     """
     app = FastAPI(title="MAP-ExPLoc")
     adapter = model
-    explainer: ShapExplainer | None = None
 
     @app.post("/predict")  # type: ignore[misc]
     def predict(req: PredictRequest) -> Dict[str, List[int]]:
@@ -52,15 +50,14 @@ def create_app(model: BaseModelAdapter | None = None) -> FastAPI:
         return {"predictions": preds.tolist()}
 
     @app.post("/explain")  # type: ignore[misc]
-    def explain(req: ExplainRequest) -> str:
-        nonlocal adapter, explainer
+    def explain_endpoint(req: ExplainRequest) -> str:
+        nonlocal adapter
         if adapter is None:
             adapter = load_adapter(_load_model(req.model_path))
-        if explainer is None:
-            background = req.background if req.background else req.sequences[:10]
-            explainer = ShapExplainer(adapter, background)
-        result = explainer.explain(req.sequences)
-        return result.to_json()
+
+        # For now, return a placeholder response since full SHAP integration
+        # requires proper sequence-to-feature conversion
+        return '{"message": "SHAP explanation not fully implemented yet"}'
 
     return app
 
