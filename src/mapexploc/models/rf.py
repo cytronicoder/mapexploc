@@ -40,7 +40,7 @@ def train_random_forest(
         from imblearn.over_sampling import SMOTE
         from imblearn.pipeline import Pipeline as ImbPipeline
         from sklearn.ensemble import RandomForestClassifier
-        from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold
+        from sklearn.model_selection import ParameterGrid, RandomizedSearchCV, StratifiedKFold
         from sklearn.preprocessing import StandardScaler
     except ImportError:
         logger.error(
@@ -86,14 +86,18 @@ def train_random_forest(
     # Randomized search with stratified cross-validation
     cv_splitter = StratifiedKFold(n_splits=cv, shuffle=True, random_state=random_state)
 
+    # Adjust n_iter if grid size is smaller to avoid warnings
+    grid_size = len(ParameterGrid(param_grid))
+    n_iter = min(20, grid_size)
+
     logger.info(
-        "Starting RandomForest randomized search with %d iterations", 20
-    )  # default n_iter for RandomizedSearchCV
+        "Starting RandomForest randomized search with %d iterations", n_iter
+    )
 
     search = RandomizedSearchCV(
         estimator=pipeline,
         param_distributions=param_grid,
-        n_iter=20,
+        n_iter=n_iter,
         cv=cv_splitter,
         scoring=scoring,
         n_jobs=n_jobs,
