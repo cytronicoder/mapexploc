@@ -7,8 +7,8 @@ name = "mapexploc"
 version = "0.1.0"
 description = "Explainable Subcellular Localization Predictor"
 readme = "README.md"
-authors = [{name = "Explocal Developers", email = "dev@example.com"}]
-license = {file = "LICENSE"}
+authors = [{ name = "Explocal Developers", email = "dev@example.com" }]
+license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
   "numpy>=1.21.0",
@@ -45,9 +45,7 @@ notebooks = [
   "seaborn>=0.11.0",
   "umap-learn>=0.5.0",
 ]
-bio = [
-  # biopython is now included in main dependencies
-]
+all = ["mapexploc[torch,esm,docs,dev,notebooks]"]
 
 [project.scripts]
 mapexploc = "mapexploc.cli:main"
