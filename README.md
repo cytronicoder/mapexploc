@@ -1,70 +1,242 @@
-# Explainable Subcellular Localization Predictor
+# MAP-ExPLoc
 
-This is a lightweight, interpretable machine-learning pipeline designed to predict protein subcellular localization from primary amino-acid sequences and reveal the key sequence motifs driving each classification. We combined classical feature engineering with a Random Forest classifier and Shapley Additive exPlanations (SHAP) to generate transparent, biologically meaningful insights.
+Model-Agnostic Pipeline for Explainable Protein Subcellular Localization
 
-> [!NOTE]  
-> This project has won the [2025 ISCB YBS Student Challenge](https://www.iscb.org/ybs2025/programme-agenda/student-challenge) at the [2025 joint international conference on Intelligent Systems for Molecular Biology (ISMB) and the European Conference on Computational Biology (ECCB)](https://www.iscb.org/ismbeccb2025/home) for its innovative approach to AI in bioinformatics.
+## Overview
 
-## Features
+MAP-ExPLoc is a comprehensive machine learning pipeline designed for predicting protein subcellular localization from amino acid sequences. The package provides explainable AI capabilities through SHAP analysis and supports multiple machine learning algorithms including k-NN and Random Forest classifiers.
 
-- Random Forest classifier trained on curated UniProtKB/Swiss-Prot sequences across 16 compartments
-- SHAP values assign per-feature contributions for each protein prediction
-- Minimal dependencies and fast inference on standard workstations
-- Easily swap in new classifiers or add custom features
+### Key Features
+
+- **Swiss-Prot Data Processing**: Extract and clean protein data from Swiss-Prot databases
+- **Feature Engineering**: Generate 31 physicochemical features from protein sequences
+- **Multiple ML Models**: k-NN and Random Forest classifiers with hyperparameter optimization
+- **Explainable AI**: SHAP-based model interpretation and visualization
+- **Production Ready**: REST API and CLI interfaces for deployment
+- **Comprehensive Evaluation**: Model performance metrics and visualization tools
 
 ## Installation
 
-1. Clone the repository:
+### Standard Installation
 
-   ```bash
-   git clone https://github.com/cytronicoder/explainable-localization-predictor.git
-   cd explainable-localization-predictor
-   ```
+Install the package from PyPI:
 
-2. Create and activate a Conda environment (recommended):
+```bash
+pip install mapexploc
+```
 
-   ```bash
-   conda env create --file environment.yml
-   conda activate eslp
-   ```
+### Complete Installation with All Features
 
-3. To update or add dependencies, modify `environment.yml` and run:
+For full functionality including visualization and notebook support:
 
-   ```bash
-   conda env update --file environment.yml --prune
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-## Requirements
+### Minimal Production Installation
 
-- Python 3.8 or higher
-- scikit-learn
-- SHAP
-- pandas
-- numpy
-- matplotlib (for optional plotting)
+For deployment environments with minimal dependencies:
 
-## Feature Engineering
+```bash
+pip install -r requirements-minimal.txt
+```
 
-- Amino-acid composition (20 dimensions)
-- Dipeptide frequencies (400 dimensions)
-- Physicochemical properties (molecular weight, isoelectric point)
-- Entropy measures for disorder prediction
+### Development Installation
 
-## Results
+For contributors and developers:
 
-Sample performance on the held-out test set:
+```bash
+git clone https://github.com/cytronicoder/mapexploc.git
+cd mapexploc
+pip install -r requirements-dev.txt
+pip install -e .
+```
 
-- Overall weighted F1: 0.88
-- Compartment AUCs: 0.93–0.97
-- Key biological insights:
-  - Hydrophobicity (GRAVY) drives membrane vs. soluble distinction
-  - Isoelectric point correlates with cytosolic adaptation
-  - Sequence length penalties reveal targeting constraints
+### Conda Environment
+
+Using conda for package management:
+
+```bash
+conda env create -f environment.yml
+conda activate eslp
+pip install -e .
+```
+
+### Dependency Groups
+
+- **Core**: Essential packages for basic functionality
+- **Notebooks**: Jupyter environment and visualization tools
+- **Development**: Testing, linting, and code quality tools
+- **Documentation**: Tools for generating and serving documentation
+- **Bioinformatics**: Specialized tools for protein sequence analysis
+
+## Usage
+
+### Command Line Interface
+
+Train a model using the default configuration:
+
+```bash
+mapexploc train --config config/default.yml
+```
+
+Make predictions on a protein sequence:
+
+```bash
+mapexploc predict MKTIIALSYIFCLVFADYKDDDDK
+```
+
+Generate explanations for predictions:
+
+```bash
+mapexploc explain MKTIIALSYIFCLVFADYKDDDDK
+```
+
+### Python API
+
+Basic usage example:
+
+```python
+from pathlib import Path
+from mapexploc.config import load_config
+from mapexploc.data import load_example_dataset
+from mapexploc.features import build_feature_matrix
+from mapexploc.models.rf import train_random_forest, predict
+
+# Load configuration
+cfg = load_config(Path("config/default.yml"))
+
+# Load and prepare data
+df = load_example_dataset(Path("examples/data/example_sequences.csv"))
+X = build_feature_matrix(df["sequence"])
+
+# Train model
+model = train_random_forest(X, df["label"].to_numpy(), cfg.model)
+
+# Make predictions
+predictions = predict(model, X)
+print(predictions)
+```
+
+### Complete Workflow Example
+
+```python
+from mapexploc.preprocessing import extract_protein_data
+from mapexploc.features import build_feature_matrix
+from mapexploc.models.rf import train_random_forest
+from mapexploc.explainers.shap import ShapExplainer
+
+# 1. Extract protein data from Swiss-Prot
+protein_data = extract_protein_data("uniprot_sprot.dat")
+
+# 2. Build feature matrix
+features_df = build_feature_matrix("sequences.fasta", "annotations.csv")
+
+# 3. Train Random Forest model
+X = features_df.drop(['entry_name', 'localization'], axis=1)
+y = features_df['localization']
+rf_result = train_random_forest(X, y)
+
+# 4. Generate SHAP explanations
+explainer = ShapExplainer(rf_result['model'])
+explanations = explainer.generate_all_plots(X.sample(100))
+```
+
+## REST API
+
+Start the API server:
+
+```bash
+uvicorn mapexploc.api:app --host 0.0.0.0 --port 8000
+```
+
+The API provides endpoints for:
+
+- `/predict`: Protein localization prediction
+- `/explain`: Model explanations via SHAP
+- `/health`: Service health check
+
+## Development
+
+### Setting Up Development Environment
+
+Install the package in development mode with all dependencies:
+
+```bash
+git clone https://github.com/cytronicoder/mapexploc.git
+cd mapexploc
+pip install -r requirements-dev.txt
+pip install -e .
+```
+
+Install pre-commit hooks for code quality:
+
+```bash
+pre-commit install
+```
+
+### Running Tests
+
+Execute the test suite:
+
+```bash
+pytest
+pytest --cov=mapexploc  # With coverage
+```
+
+### Code Quality
+
+Run linting and formatting:
+
+```bash
+pre-commit run --all-files
+black src/ tests/
+ruff check src/ tests/
+mypy src/
+```
+
+### Building Documentation
+
+Serve documentation locally:
+
+```bash
+mkdocs serve
+```
+
+Build documentation for production:
+
+```bash
+mkdocs build
+```
+
+## Publishing
+
+### Building the Package
+
+Create distribution packages:
+
+```bash
+python -m build
+```
+
+### Uploading to PyPI
+
+Upload to PyPI (requires authentication):
+
+```bash
+python -m twine upload dist/*
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests and ensure code quality (`pre-commit run --all-files`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Contributing
-
-Contributions are welcome! Please open issues for bug reports or feature requests, and submit pull requests against the `main` branch.

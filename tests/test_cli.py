@@ -1,0 +1,39 @@
+"""Tests for the command line interface."""
+
+from pathlib import Path
+from shutil import copyfile
+from typing import Any
+
+from typer.testing import CliRunner
+
+from mapexploc.cli import app
+
+
+def test_cli_train_predict(tmp_path: Path, monkeypatch: Any) -> None:
+    runner = CliRunner()
+    root = Path(__file__).resolve().parents[1]
+    cfg_path = root / "config" / "default.yml"
+    data_src = root / "examples" / "data" / "example_sequences.csv"
+    data_dst = tmp_path / "examples" / "data" / "example_sequences.csv"
+    data_dst.parent.mkdir(parents=True, exist_ok=True)
+    copyfile(data_src, data_dst)
+
+    # Duplicate data to ensure enough samples for CV
+    import pandas as pd
+
+    df = pd.read_csv(data_dst)
+    df = pd.concat([df] * 5, ignore_index=True)
+    df.to_csv(data_dst, index=False)
+
+    with monkeypatch.context() as m:
+        m.chdir(tmp_path)
+        result = runner.invoke(app, ["train", "--config", str(cfg_path)])
+        assert result.exit_code == 0
+        result = runner.invoke(
+            app, ["predict", "MKTIIALSYIFCLVFADYKDDDDK", "--model-path", "model.pkl"]
+        )
+        assert result.exit_code == 0
+        result = runner.invoke(
+            app, ["explain", "MKTIIALSYIFCLVFADYKDDDDK", "--model-path", "model.pkl"]
+        )
+        assert result.exit_code == 0

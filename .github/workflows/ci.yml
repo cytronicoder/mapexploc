@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[all]"
+          pip install pre-commit pytest
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+      - name: Run tests
+        run: pytest tests/
